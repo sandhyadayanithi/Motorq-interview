@@ -77,6 +77,7 @@ class Manual extends Booking{
   int[][] seatsBooked;
   int totSeats;
   String vip;
+  int bookingTotal;
   Scanner sc=new Scanner(System.in);
 
   Manual(CinemaHall ch,String vip){
@@ -141,6 +142,7 @@ class Manual extends Booking{
     for(int[] seat: seatsBooked){
       if (ch.hall[seat[0]][seat[1]]==0){
         ch.hall[seat[0]][seat[1]]=1;
+        bookingTotal+=ch.cost[seat[0]];
       }
       else{
         System.out.println("The seat chosen is already booked.");
@@ -148,7 +150,7 @@ class Manual extends Booking{
       }
     }
     String CID="C"+count;
-    System.out.println("Booking successful.");
+    System.out.printf("Booking successful. The booking total is: %d\n",bookingTotal);
     System.out.printf("Your customer ID is: %s",CID);
     customerHashMap.put(CID,seatsBooked);
     return true;
@@ -172,21 +174,27 @@ class Manual extends Booking{
           cancelSeats[i][0]=sc.nextInt();
           cancelSeats[i][1]=sc.nextInt();
         }
-        int seatFound=1;
-        for (int[] seat : cus.getValue()) {
-          for (int[] cancelSeat : cancelSeats) {
-            if (!java.util.Arrays.equals(seat, cancelSeat)) {
+        int seatFound=0;
+        for (int[] cancelSeat : cancelSeats ) {
+          for (int[] seat : cus.getValue()) {
+            if (java.util.Arrays.equals(seat, cancelSeat)) {
+              seatFound+=1;
+              break;
+            }
+            else{
               seatFound=0;
-              System.out.println("Seat not found, invalid seat given.");
-              return;
             }
           }
         }
-        if (seatFound==1){
+        if (seatFound==noOfCancelSeats){
           for(int[] seat: cancelSeats){
             ch.hall[seat[0]][seat[1]]=0;
           }
           System.out.println("Booking cancelled successfully.");
+        }
+        else{
+          System.out.println("Seat not found, invalid seat given.");
+          return;
         }
       }
     }
@@ -201,7 +209,7 @@ public class Main {
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
   
-    int[] costs = {100, 150, 200};
+    int[] costs = {100, 150, 200, 250, 300};
     int[] shows = {12, 15, 18};
     CinemaHall hall = new CinemaHall(5, 5, costs, shows);
     

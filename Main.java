@@ -57,7 +57,7 @@ abstract class Booking{
     if (firstCol!=0 && ch.hall[row][firstCol-1]!=0){
       return false;
     }
-    if (lastCol!=ch.hall[0].length-1 && ch.hall[row][lastCol-1]!=0){
+    if (lastCol!=ch.hall[0].length-1 && ch.hall[row][lastCol+1]!=0){
       return false;
     }
 

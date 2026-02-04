@@ -42,12 +42,18 @@ abstract class Booking{
     int firstCol=arr[0][1];
     int lastCol=arr[arr.length-1][1];
 
-    if (row!=0 && ch.hall[row-1][firstCol]!=0){
-      return false;
+    if (row > 0) {
+      for (int col = firstCol; col <= lastCol; col++) {
+        if (ch.hall[row - 1][col] != 0) return false;
+      }
     }
-    else if (row!=ch.hall.length-1 && ch.hall[row+1][lastCol]!=0){
-      return false;
+
+    if (row < ch.hall.length - 1) {
+      for (int col = firstCol; col <= lastCol; col++) {
+        if (ch.hall[row + 1][col] != 0) return false;
+      }
     }
+
     if (firstCol!=0 && ch.hall[row][firstCol-1]!=0){
       return false;
     }
@@ -61,7 +67,7 @@ abstract class Booking{
   public boolean isolatedCheck(int[][] arr){
     // assuming user seats in the same row
     for (int i=0;i<arr.length-1;i++){
-      if (arr[i+1][1]-arr[i][1]!=1 || arr[i+1][1]-arr[i][1]!=-1){
+      if (Math.abs(arr[i+1][1]-arr[i][1])!=1){
         return false;
       }
     }

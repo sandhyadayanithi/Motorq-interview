@@ -61,7 +61,7 @@ abstract class Booking{
   public boolean isolatedCheck(int[][] arr){
     // assuming user seats in the same row
     for (int i=0;i<arr.length-1;i++){
-      if (arr[i+1][1]-arr[i][1]!=1){
+      if (arr[i+1][1]-arr[i][1]!=1 || arr[i+1][1]-arr[i][1]!=-1){
         return false;
       }
     }
@@ -151,13 +151,12 @@ class Manual extends Booking{
     }
     String CID="C"+count;
     System.out.printf("Booking successful. The booking total is: %d\n",bookingTotal);
-    System.out.printf("Your customer ID is: %s",CID);
+    System.out.printf("Your customer ID is: %s\n",CID);
     customerHashMap.put(CID,seatsBooked);
     return true;
   }
 
   public void cancelBooking(HashMap<String,int[][]> customerHashMap){
-    sc.nextLine();
     System.out.println("Enter the customer ID to cancel booking:");
     String cusId=sc.nextLine();
     int found=0;
@@ -189,6 +188,13 @@ class Manual extends Booking{
         if (seatFound==noOfCancelSeats){
           for(int[] seat: cancelSeats){
             ch.hall[seat[0]][seat[1]]=0;
+            int[][] booked=customerHashMap.get(cusId);
+            for (int i = 0; i < booked.length; i++) {
+              if (booked[i][0] == seat[0] && booked[i][1] == seat[1]) {
+                  booked[i][0] = -1; 
+                  booked[i][1] = -1; 
+              }
+            }
           }
           System.out.println("Booking cancelled successfully.");
         }
@@ -214,13 +220,14 @@ public class Main {
     CinemaHall hall = new CinemaHall(5, 5, costs, shows);
     
     HashMap<String, int[][]> customerData = new HashMap<>();
-    System.out.println("Do you want to enter VIP mode (yes/no):");
-    String vip=sc.nextLine();
-    Manual bookingSystem = new Manual(hall, vip);
+    
     int bookingCount=0;
     
     boolean running = true;
     while (running) {
+      System.out.println("Do you want to enter VIP mode (yes/no):");
+      String vip=sc.nextLine();
+      Manual bookingSystem = new Manual(hall, vip);
       System.out.println("\nCinema Booking System:\n");
       System.out.println("1. Check Seat Availability");
       System.out.println("2. Book Seats (Manual)");

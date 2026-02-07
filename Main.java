@@ -201,6 +201,7 @@ class Manual extends Booking{
                   booked[i][1] = -1; 
               }
             }
+            customerHashMap.put(cusId,booked);
           }
           System.out.println("Booking cancelled successfully.");
         }
